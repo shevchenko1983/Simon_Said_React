@@ -77,36 +77,27 @@ function App() {
 
       section.innerHTML = "";
       //timeout for blinking
-      const promise = new Promise((res, rej) => {
-          res(
-              setTimeout(() => {
-                  displayShadowBlock(section);
-              }, 1000)
-          );
-      });
-      promise.then(() => {
-         let countAnswers = 0;
-         activeSections.forEach((item, index) => {
-             for(let i = 0; i < roundCounter; i++){
-                 console.log(item);
-                 if(index === i && item === activedSectionColor){
-                     //correct sequence
-                     console.log("correct");
-                     countAnswers++;
-                 }else{
-                     //not correct sequence
-                     setRoundCounter(0);
-                     return;
-                 }
-             }
-         });
+      setTimeout(() => {
+          displayShadowBlock(section);
+      }, 1000);
+
+      console.log(activeSections);
+     if(activeSections.includes(activedSectionColor)) {
+         console.log("includes", activedSectionColor)
+         const sections = activeSections.filter((item) => item !== activedSectionColor);
          //if all answers are correct - level up!!
-         if(roundCounter === countAnswers){
+         if (sections.length === 0) {
              setRoundCounter(roundCounter + 1);
              //remove all in actived sections
              setActiveSections([]);
+         } else {
+             //not guess!!!
+             setRoundCounter(0);
          }
-      });
+     }else{
+         //not guess!!!
+         setRoundCounter(0);
+     }
   }
 
 
