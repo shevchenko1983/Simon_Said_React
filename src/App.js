@@ -44,7 +44,7 @@ function App() {
   }
 
   const startGameHandler = () => {
-      console.log("start", sectionsRef.current.children);
+      //console.log("start", sectionsRef.current.children);
       //exclude btn from sections array
       const arrayOfSections = [...Array.from(sectionsRef.current.children)].filter((item) => item.id !== "btn");
       //all section clear by default
@@ -55,17 +55,20 @@ function App() {
               }, 500);
           }
       });
+
       //get random sections from all sections for blinking
       const sections = [...arrayOfSections.sort(() => Math.random() - Math.random()).slice(0, roundCounter)];
       //console.log(sections);
       if(sections.length > 0){
+          //put active colors ONLY to array
+          setActiveSections([...activeSections, ...sections.map((item) => item.style.backgroundColor)]);
+
           for(let i = 0; i < sections.length; i++){
               //timeout for blinking
               setTimeout(() => {
-                  setActiveSections([...activeSections, sections[i].style.backgroundColor]);
                   displayShadowBlock(sections[i]);
-                  console.log( sections[i].innerHTML, sections[i]);
-              }, 500)
+                  //console.log( sections[i].innerHTML, sections[i], activeSections);
+              }, 500);
               sections[i].innerHTML = "";
           }
       }
@@ -73,7 +76,7 @@ function App() {
 
   //here we have a bug, second round calculated wrong
   const onCheckColorSequences = (section, activedSectionColor) => {
-     console.log(section, activedSectionColor);
+     //console.log(section, activedSectionColor);
 
       section.innerHTML = "";
       //timeout for blinking
@@ -81,19 +84,20 @@ function App() {
           displayShadowBlock(section);
       }, 1000);
 
-      console.log(activeSections);
      if(activeSections.includes(activedSectionColor)) {
-         console.log("includes", activedSectionColor)
-         const sections = activeSections.filter((item) => item !== activedSectionColor);
+         console.log("includes", activedSectionColor);
+         const sectionsIndex = activeSections.findIndex((item) => item === activedSectionColor);
+         activeSections.splice(sectionsIndex, 1);
          //if all answers are correct - level up!!
-         if (sections.length === 0) {
+         if (activeSections.length === 0) {
              setRoundCounter(roundCounter + 1);
              //remove all in actived sections
              setActiveSections([]);
-         } else {
-             //not guess!!!
-             setRoundCounter(0);
          }
+         // else {
+         //     //not guess!!!
+         //     setRoundCounter(0);
+         // }
      }else{
          //not guess!!!
          setRoundCounter(0);
