@@ -24,6 +24,7 @@ function App() {
   const [roundCounter, setRoundCounter] = useState(0);
   const [activeSections, setActiveSections] = useState([]);
   const [startGame, setStartGame] = useState(false);
+  const [gameStatus, setGameStatus] = useState("Press");
   const sectionsRef = useRef();
 
   //Start Game Launcher
@@ -35,6 +36,20 @@ function App() {
       }
   }, [startGame, roundCounter]);
 
+  //check game status
+  useEffect(() => {
+      if(gameStatus === "Error!"){
+          //console.log("error");
+          setTimeout(() => {
+              setGameStatus("Press");
+
+          }, 2000);
+          setActiveSections([]);
+          setStartGame(true);
+          setRoundCounter(0);
+      }
+  }, [gameStatus])
+
 
   const onClickStartGameBtn = () => {
       if(!roundCounter){
@@ -44,7 +59,7 @@ function App() {
   }
 
   const startGameHandler = () => {
-      console.log("run startGameHandler");
+      //console.log("run startGameHandler");
       //console.log("start", sectionsRef.current.children);
       //exclude btn from sections array
       const arrayOfSections = [...Array.from(sectionsRef.current.children)].filter((item) => item.id !== "btn");
@@ -69,7 +84,7 @@ function App() {
   //here we have a bug, second round calculated wrong
   const onCheckColorSequences = (section, activedSectionColor) => {
      //console.log(section, activedSectionColor);
-      console.log("run onCheckColorSequences");
+      //console.log("run onCheckColorSequences");
       section.innerHTML = "";
       //timeout for blinking
       setTimeout(() => {
@@ -77,7 +92,7 @@ function App() {
       }, 1000);
 
      if(activeSections.includes(activedSectionColor)) {
-         console.log("includes", activedSectionColor);
+         //console.log("includes", activedSectionColor);
          const sectionsIndex = activeSections.findIndex((item) => item === activedSectionColor);
          activeSections.splice(sectionsIndex, 1);
          //if all answers are correct - level up!!
@@ -89,6 +104,7 @@ function App() {
      }else{
          //not guess!!!
          setRoundCounter(0);
+         setGameStatus("Error!");
      }
   }
 
@@ -103,7 +119,7 @@ function App() {
                                    action={onCheckColorSequences}
                     />
           })}
-           <MainButton action={onClickStartGameBtn} value={roundCounter}/>
+           <MainButton action={onClickStartGameBtn} value={roundCounter} gameStatus={gameStatus}/>
       </MainWrapper>
     </div>
   );

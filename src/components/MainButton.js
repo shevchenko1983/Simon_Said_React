@@ -32,10 +32,10 @@ const MainBtnWrapper = styled('div')`
     }
 `;
 
-const MainButton = ({value, action = null}) => {
+const MainButton = ({value, action = null, gameStatus}) => {
   return(
       <MainBtnWrapper onClick={() => action()} id={"btn"}>
-          <span>{value !== 0 ? value : "Press"}</span>
+          <span>{value !== 0 ? value : gameStatus}</span>
       </MainBtnWrapper>
   );
 };
