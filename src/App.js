@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ColorSection from "./components/ColorSection";
 import MainButton from "./components/MainButton";
-import {displayShadowBlock} from "./helpers/DisplayShadowBlock";
+import {blinkingColorSections, displayShadowBlock} from "./helpers/DisplayShadowBlock";
 
 
 const MainWrapper = styled('div')`
@@ -44,15 +44,14 @@ function App() {
   }
 
   const startGameHandler = () => {
+      console.log("run startGameHandler");
       //console.log("start", sectionsRef.current.children);
       //exclude btn from sections array
       const arrayOfSections = [...Array.from(sectionsRef.current.children)].filter((item) => item.id !== "btn");
       //all section clear by default
       arrayOfSections.forEach((item) => {
           if(item.children.length > 0){
-              setTimeout(() => {
-                  displayShadowBlock(item);
-              }, 500);
+             displayShadowBlock(item);
           }
       });
 
@@ -62,22 +61,15 @@ function App() {
       if(sections.length > 0){
           //put active colors ONLY to array
           setActiveSections([...activeSections, ...sections.map((item) => item.style.backgroundColor)]);
-
-          for(let i = 0; i < sections.length; i++){
-              //timeout for blinking
-              setTimeout(() => {
-                  displayShadowBlock(sections[i]);
-                  //console.log( sections[i].innerHTML, sections[i], activeSections);
-              }, 500);
-              sections[i].innerHTML = "";
-          }
+         //run blinking function avery time with delay till section.length > section
+          blinkingColorSections(sections[0], 0, sections);
       }
   }
 
   //here we have a bug, second round calculated wrong
   const onCheckColorSequences = (section, activedSectionColor) => {
      //console.log(section, activedSectionColor);
-
+      console.log("run onCheckColorSequences");
       section.innerHTML = "";
       //timeout for blinking
       setTimeout(() => {
