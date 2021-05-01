@@ -31,7 +31,7 @@ function App() {
       if(startGame){
           setTimeout(() => {
             startGameHandler();
-          }, 1000);
+          }, 1500);
       }
   }, [startGame, roundCounter]);
 
@@ -86,18 +86,12 @@ function App() {
              //remove all in actived sections
              setActiveSections([]);
          }
-         // else {
-         //     //not guess!!!
-         //     setRoundCounter(0);
-         // }
      }else{
          //not guess!!!
          setRoundCounter(0);
      }
   }
 
-
- console.log(roundCounter, activeSections);
 
   return (
     <div className="App">
